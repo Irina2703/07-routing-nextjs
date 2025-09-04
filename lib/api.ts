@@ -1,5 +1,3 @@
-console.log("TOKEN from env:", process.env.NEXT_PUBLIC_NOTEHUB_TOKEN);
-
 import axios from "axios";
 import type { Note } from "@/types/note";
 
@@ -32,14 +30,12 @@ export async function fetchNoteById(id: string): Promise<Note> {
     return res.data;
 }
 
-export async function createNote(
-    newNote: CreateNoteParams
-): Promise<Note> {
+export async function createNote(newNote: CreateNoteParams): Promise<Note> {
     const res = await api.post<Note>("/notes", newNote);
     return res.data;
 }
 
-export async function deleteNote(id: string): Promise<{ message: string }> {
-    const res = await api.delete<{ message: string }>(`/notes/${id}`);
+export async function deleteNote(id: string): Promise<Note> {
+    const res = await api.delete<Note>(`/notes/${id}`);
     return res.data;
 }
