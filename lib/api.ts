@@ -1,3 +1,4 @@
+import axios from "axios";
 import type { Note } from "@/types/note";
 
 export interface CreateNoteParams {
@@ -6,26 +7,37 @@ export interface CreateNoteParams {
     tag: "Todo" | "Work" | "Personal" | "Meeting" | "Shopping";
 }
 
-export async function fetchNotes(page: number, userQuery: string = "") {
-    const res = await fetch(`/api/notes?page=${page}&search=${userQuery}`);
-    return res.json() as Promise<{ notes: Note[]; totalPages: number }>;
-}
+const api = axios.create({
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN}`,
+    },
+});
 
-export async function fetchNoteById(id: string) {
-    const res = await fetch(`/api/notes?id=${id}`);
-    return res.json() as Promise<Note>;
-}
-
-export async function createNote(newNote: CreateNoteParams) {
-    const res = await fetch(`/api/notes`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newNote),
+export async function fetchNotes(
+    page: number,
+    userQuery: string = ""
+): Promise<{ notes: Note[]; totalPages: number }> {
+    const res = await api.get<{ notes: Note[]; totalPages: number }>("/notes", {
+        params: { page, search: userQuery },
     });
-    return res.json() as Promise<Note>;
+    return res.data;
 }
 
-export async function deleteNote(id: string) {
-    const res = await fetch(`/api/notes?id=${id}`, { method: "DELETE" });
-    return res.json() as Promise<Note>;
+export async function fetchNoteById(id: string): Promise<Note> {
+    const res = await api.get<Note>(`/notes/${id}`);
+    return res.data;
+}
+
+export async function createNote(
+    newNote: CreateNoteParams
+): Promise<Note> {
+    const res = await api.post<Note>("/notes", newNote);
+    return res.data;
+}
+
+export async function deleteNote(id: string): Promise<{ message: string }> {
+    const res = await api.delete<{ message: string }>(`/notes/${id}`);
+    return res.data;
 }
