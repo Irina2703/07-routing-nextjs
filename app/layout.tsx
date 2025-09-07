@@ -22,10 +22,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
     children,
-    modal,
+    modal, // ✅ делаем обязательным
 }: Readonly<{
     children: React.ReactNode;
-    modal?: React.ReactNode; // ✅ теперь опциональный
+    modal: React.ReactNode; // ✅ обязателен
 }>) {
     return (
         <html lang="en">
@@ -33,7 +33,7 @@ export default function RootLayout({
                 <TanStackProvider>
                     <Header />
                     {children}
-                    {modal}
+                    {modal ?? null} {/* ✅ безопасно рендерим null */}
                     <Footer />
                 </TanStackProvider>
             </body>
