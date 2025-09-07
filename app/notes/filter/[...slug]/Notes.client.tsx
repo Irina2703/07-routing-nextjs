@@ -10,7 +10,7 @@ import NoteList from "@/components/NoteList/NoteList";
 import Modal from "@/components/Modal/Modal";
 import NoteForm from "@/components/NoteForm/NoteForm";
 
-type NoteListClientProps = { tag?: string }
+type NoteListClientProps = { tag?: string };
 
 export default function NoteListClient({ tag }: NoteListClientProps) {
     const [searchText, setSearchText] = useState("");
@@ -22,11 +22,11 @@ export default function NoteListClient({ tag }: NoteListClientProps) {
 
     useEffect(() => {
         setPage(1);
-    }, [debouncedText]);
+    }, [debouncedText, tag]);
 
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["notes", debouncedText, page, tag],
-        queryFn: () => fetchNotes(page, debouncedText || ""),
+        queryFn: () => fetchNotes(page, debouncedText || "", tag || ""),
         placeholderData: keepPreviousData,
     });
 
