@@ -3,11 +3,11 @@ import Link from "next/link";
 
 const tags: string[] = [
     "All",
-    "Personal",
-    "Work",
-    "Shopping",
-    "Meeting",
     "Todo",
+    "Work",
+    "Personal",
+    "Meeting",
+    "Shopping",
 ];
 
 export default function SideBarNotes() {
@@ -15,7 +15,7 @@ export default function SideBarNotes() {
         <ul className={css.menuList}>
             {tags.map((tag) => (
                 <li className={css.menuItem} key={tag}>
-                    <Link href={`/notes/filter/${tag}`} className={css.menuLink}>
+                    <Link href={`/notes/filter/${tag.toLowerCase()}`} className={css.menuLink}>
                         {tag}
                     </Link>
                 </li>
